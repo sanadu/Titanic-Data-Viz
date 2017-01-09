@@ -83,6 +83,7 @@
           }
           y.title="Passenger Count";
           y.fontSize="14px";
+          y.showGridlines = false;
 
           var s = myChart.addSeries(["Survived"], dimple.plot.bar);
           s.addOrderRule(["Survived","Dead"]);
@@ -177,10 +178,6 @@
   <p></p>
   <div>
   Toggle option to see counts and percentages:
-  </div>
-  <p></p>
-  <p></p>
-  <div>
     <button id="count_btn">Count</button>
     <button id="percent_btn">Percentage</button>
   </div>

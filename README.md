@@ -8,7 +8,7 @@ add any context that can help readers understand it
 
 Design -
 
-Graphic:
+Chart Type:
 I chose the bar chart because it is the best tool to compare between
 two categories. From the data, I saw that gender and cabin class are the factors
 which affect the survival rate. Other factors such as age and presence of
@@ -28,6 +28,12 @@ I decided to unstack the graphics, but decided against changing the visualizatio
 too much (using a different style) to avoid confusion and instead
 added a label to draw the viewers eyes directly to one specific bar for survival rate.
 
+Visual Encodings:
+
+The chart includes positional encodings on X axis to denote passenger Characteristics
+(gender and cabin class) and Y axis position for count of passengers. Color is
+another encoding used to denote survival status.
+
 Color:
 My first choice for color was deep red and green. This seemed a natural choice because
 the graphic was trying to convey one category as "dead" (danger!bad!) and the other
@@ -42,11 +48,11 @@ as an exception to the rule.
 One of the feedback I got was that colors were too bright, and muted colors may be better.
 I chose to mute the colors by choosing pastel shades of red and green.
 
-Controls/Navigation:
+Controls/Navigation/Layout:
 
 I visited a number of visualizations on Titanic data set created by Udacity students
 for their final projects. I chose to adopt things that I liked from some of these
-visualizations. I also wanted to present a different approach, chose to ask
+visualizations. I also wanted to present a different approach, so chose to ask
 the reader a specific question and give the user controls that enabled them
 to answer that question. This came from what I asked myself during exploration
 of this dataset in the Intro to data science course. From the feedbacks I received,
@@ -55,11 +61,16 @@ I am glad that the audience liked this approach and thought it to be effective.
 I chose two visible controls - gender and cabin class, which changed the format
 of visualization (multiple groups changed to single group, stacked bar became
 unstacked). I also chose two controls, age and presence of family that
-filtered the data, but did not change how the graphic was drawn. This was to
-provide additional motivation for the audience to play with the graphic and also
-because these factors were readily available in the dataset. 
+filtered the data, but did not change how the chart was drawn. This was to
+provide additional motivation for the audience to play with the visualization
+and also because these factors were readily available in the dataset. I adopted the idea
+of choosing to toggle between counts and percentages from a visualization I
+saw posted in the forum, which was also well received.
 
-
+A feedback I got about the layout is that the toggle button and the text
+describing it was disconnected. I moved the button inline with the text to fix this
+problem. Also, a reviewer commented that the gridlines that were automatically
+added by dimplejs were not necessary, so I removed them.
 
 Feedback -
 
