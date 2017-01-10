@@ -6,6 +6,10 @@
   <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
     <script type="text/javascript">
 
+      //accessor function for getting a record.
+      //the records are transformed to add some features
+      //make it easier to draw the chart and to transform
+      //some to readable names.
       function get_data(d) {
 
         if(d['SibSp'] == 1 || d['Parch'] == 1){
@@ -46,11 +50,10 @@
         return d;
       };
 
+      //actually draw the chart given the data.
       function draw_chart(data) {
-        /*
-        D3.js setup code
-        */
 
+          //set up the
           "use strict";
           var margin = 75,
               width = 1000 - margin,
@@ -63,22 +66,21 @@
             .append('g')
                 .attr('class','chart');
 
-      /*
-        Dimple.js Chart construction code
-      */
-
+          //construct the chart
           var myChart = new dimple.chart(svg, data);
           myChart.defaultColors = [new dimple.color("#90D4B0"), new dimple.color("#D490A7")]
 
+          //x axis
           var x = myChart.addCategoryAxis("x", ["Sex","Pclass"]);
           x.addOrderRule(["female","male"])
           x.addGroupOrderRule(["First Class","Second Class", "Third Class"]);
-
           x.fontSize="14px";
           x.title="Passenger Characteristics(Sex grouped by Cabin Class)";
 
+          //y axis
           var y = myChart.addMeasureAxis("y","number_of_passengers");
 
+          //choose to show percentage values or raw counts.
           if (d3.select("#count_btn").style("opacity")=="1"){
             y.showPercent=true;
           }
@@ -93,16 +95,16 @@
           s.addOrderRule(["Survived","Dead"]);
 
           myChart.addLegend(65, 10, 760, 70, "right");
-
           myChart.draw();
 
-          // After drawing we can access the shapes and their associated data
-          // to add labels.
+          // After drawing access the shapes and their associated data
+          // to add labels on bars for survival rates.
           d3.selectAll(".dimple-bar.dimple-survived").each(function(d) {
 
-            // Get the shape as a d3 selection
+            // Get the rectangle
             var shape = d3.select(this);
 
+            //choose to display percentage or count as text for label
             var value = "";
             if(d3.select("#percent_btn").style("opacity")==0.2){
               value = d3.format(".0%")(d.yBound);
@@ -110,28 +112,20 @@
               value = d.yValue;
             }
 
-            // Get the height and width from the scales
+            // Get the height and width from the rectangle
             height = parseFloat(this.getAttribute("height"));
             width = parseFloat(this.getAttribute("width"));
 
-            //debugger;
             // Add a text label for the value
             svg.append("text")
-                // Position in the centre of the shape (vertical position is
-                // manually set due to cross-browser problems with baseline)
+                // Position in the center of the shape
                 .attr("x", parseFloat(this.getAttribute("x")) +  width/2)
                 .attr("y", parseFloat(this.getAttribute("y")) +  height/2)
-
-                // Centre align
                 .style("text-anchor", "middle")
                 .style("font-size", "16px")
                 .style("font-family", "sans-serif")
                 .style("font-weight", "bold")
-
-            // Make it a little transparent to tone down the black
                 .style("opacity", 0.7)
-
-            // Format the number
                 .text(value);
           });
 
@@ -151,16 +145,20 @@
         return a;
       };
 
-      function get_filtered_data(data){
 
+      function get_filtered_data(data){
+          //check the choice boxes and get the current choice values.
           var age = d3.select('#age_select').property('value');
           var sex = d3.select('#sex_select').property('value');
           var pclass = d3.select('#class_select').property('value');
           var family = d3.select("#family_select").property('value');
 
+          //filter the data according to what is chosen in the controls.
           if(family === "With Family"){
             var data1 = dimple.filterData(data, "Parch", ["1"]);
             var data2 = dimple.filterData(data, "SibSp", ["1"]);
+            //this one time, we have to combine and deduplicate the values.
+            //since the relation is Parch == 1 or SibSp == 1
             var combinedData = data1.concat(data2);
             data = arrayUnique(combinedData);
           }else if(family === "Alone"){
@@ -268,7 +266,7 @@
   d3.select("#percent_btn").style("opacity",0.2);
   d3.csv("data/titanic_data.csv", get_data, draw);
 
-  //If a button is clicked, change the chart
+  //If a button is clicked, or control is chosen, change the chart
   d3.select("#count_btn").on("click", function() {
     d3.select("#percent_btn").style("opacity",1);
     d3.select("#count_btn").style("opacity",0.2);
