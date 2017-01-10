@@ -8,6 +8,10 @@
 
       function get_data(d) {
 
+        if(d['SibSp'] == 1 || d['Parch'] == 1){
+          d['WithFamily']="1"
+        };
+
         if(d['Survived'] == 0){
           d['Survived'] = "Dead"
         } else{
@@ -42,7 +46,7 @@
         return d;
       };
 
-      function get_chart(data) {
+      function draw_chart(data) {
         /*
         D3.js setup code
         */
@@ -90,7 +94,61 @@
 
           myChart.addLegend(65, 10, 760, 70, "right");
 
-          return myChart;
+          myChart.draw();
+
+          // After drawing we can access the shapes and their associated data
+          // to add labels.
+          d3.selectAll(".dimple-bar.dimple-survived").each(function(d) {
+
+            // Get the shape as a d3 selection
+            var shape = d3.select(this);
+
+            var value = "";
+            if(d3.select("#percent_btn").style("opacity")==0.2){
+              value = d3.format(".0%")(d.yBound);
+            }else{
+              value = d.yValue;
+            }
+
+            // Get the height and width from the scales
+            height = parseFloat(this.getAttribute("height"));
+            width = parseFloat(this.getAttribute("width"));
+
+            //debugger;
+            // Add a text label for the value
+            svg.append("text")
+                // Position in the centre of the shape (vertical position is
+                // manually set due to cross-browser problems with baseline)
+                .attr("x", parseFloat(this.getAttribute("x")) +  width/2)
+                .attr("y", parseFloat(this.getAttribute("y")) +  height/2)
+
+                // Centre align
+                .style("text-anchor", "middle")
+                .style("font-size", "16px")
+                .style("font-family", "sans-serif")
+                .style("font-weight", "bold")
+
+            // Make it a little transparent to tone down the black
+                .style("opacity", 0.7)
+
+            // Format the number
+                .text(value);
+          });
+
+      };
+
+      function arrayUnique(array) {
+        var a = array.concat();
+        for(var i=0; i<a.length; ++i) {
+          for(var j=i+1; j<a.length; ++j) {
+            var d1 = a[i]
+            var d2 = a[j]
+            if(d1['PassengerId'] === d2['PassengerId']){
+                a.splice(j--, 1);
+            }
+          }
+        }
+        return a;
       };
 
       function get_filtered_data(data){
@@ -98,6 +156,17 @@
           var age = d3.select('#age_select').property('value');
           var sex = d3.select('#sex_select').property('value');
           var pclass = d3.select('#class_select').property('value');
+          var family = d3.select("#family_select").property('value');
+
+          if(family === "With Family"){
+            var data1 = dimple.filterData(data, "Parch", ["1"]);
+            var data2 = dimple.filterData(data, "SibSp", ["1"]);
+            var combinedData = data1.concat(data2);
+            data = arrayUnique(combinedData);
+          }else if(family === "Alone"){
+            data = dimple.filterData(data, "Parch", ["0"]);
+            data = dimple.filterData(data, "SibSp", ["0"]);
+          }
 
           if (sex === "Male"){
             data = dimple.filterData(data, "Sex", ["male"]);
@@ -131,8 +200,7 @@
 
         function draw(data) {
           data = get_filtered_data(data);
-          var myChart = get_chart(data)
-          myChart.draw();
+          draw_chart(data)
         };
 
       </script>
@@ -142,9 +210,11 @@
   <p></p>
   The giant steam ship RMS Titanic, thought to be unsunkable, sunk on her
   maiden voyage after colliding with an iceberg, killing 1502 out of 2224 passengers and crew.
-  The graphics below is based on the passenger log from the ship and
+  The survival rate was extremely low because there not enough life boats.
+  The chart below is based on the passenger log from the ship and
    shows how various characteristics such as age, sex and cabin class
-  might predict a passenger's survival.
+  might predict a passenger's survival. Assuming you got a chance to travel
+  abroad the Titanic, would you have survived?
   <p></p>
   <p></p>
   Are you a male or female?
@@ -173,6 +243,14 @@
     <option>Youth(19-25)</option>
     <option>Adult(25-65)</option>
     <option>Senior(65+)</option>
+  </select>
+  <p></p>
+  <p></p>
+  Will you travel with family or alone?
+  <select id="family_select">
+    <option>Show All</option>
+    <option>With Family</option>
+    <option>Alone</option>
   </select>
   <p></p>
   <p></p>
@@ -220,9 +298,12 @@
     d3.csv("data/titanic_data.csv", get_data, draw);
   });
 
+  d3.select("#family_select").on("change", function() {
+    d3.select("svg").remove();
+    d3.csv("data/titanic_data.csv", get_data, draw);
+  });
+
   </script>
-
-
 
 </body>
 </html>

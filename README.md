@@ -2,31 +2,36 @@
 A data visualization exercise using titanic passenger survival dataset.
 
 Summary -
-in no more than 4 sentences,
-briefly introduce your data visualization and
-add any context that can help readers understand it
+The giant steam ship RMS Titanic, thought to be indestructible,
+sunk on her maiden voyage after colliding with an iceberg,
+killing 1502 out of 2224 passengers and crew. The survival rate was
+extremely low because there not enough life boats. The lessons learned
+from this tragic accident encouraged introduction of better safety
+standards for ships. The chart is based on the passenger log
+from the Titanic and shows how various characteristics such as age,
+sex and cabin class might predict a passenger's survival.
 
 Design -
 
 Chart Type:
 I chose the bar chart because it is the best tool to compare between
-two categories. From the data, I saw that gender and cabin class are the factors
-which affect the survival rate. Other factors such as age and presence of
-family did not seem as influential. Grouping by gender and subgrouping by cabin
+categorical data. From the data, I saw that gender and cabin class are the factors
+which affect the survival rate most. Other factors such as age and presence of
+family was interesting, but did not seem as influential. Grouping by gender and subgrouping by cabin
 class was chosen because the arrangement gave a clear trend line for survival rate.
 Showing survival count as a stacked bar graph allows the comparison between overall
-count and survived count in each category.
-
-I also wanted to limit the number of
-factors displayed in the chart for the sake of clarity. Even when controls were
-being operated on, the chart does not change much, avoiding any confusion to the
+count and survived count in each category. I also wanted to limit the number of
+factors displayed in the chart for the sake of clarity and simplicity. Even when controls were
+being operated on, the chart does not change drastically, avoiding any confusion to the
 viewer.
 
 One of the feedbacks I got about the chart layout was that when there is only one
 bar displayed, I could unstack the bar or use a different style of visualization.
-I decided to unstack the graphics, but decided against changing the visualization
-too much (using a different style) to avoid confusion and instead
-added a label to draw the viewers eyes directly to one specific bar for survival rate.
+I decided to not unstack the bars because I felt that would change the chart too much
+and I might loose the audience. I decided against using a different style also for
+the same reason. Instead, to make the "survival rate" more pronounced, I
+added a label which would draw the viewers eyes directly to one specific rectangle
+ for survived in the selected category.
 
 Visual Encodings:
 
@@ -51,7 +56,7 @@ I chose to mute the colors by choosing pastel shades of red and green.
 Controls/Navigation/Layout:
 
 I visited a number of visualizations on Titanic data set created by Udacity students
-for their final projects. I chose to adopt things that I liked from some of these
+for their final projects. I chose to adopt common and effective ideas that I liked from some of these
 visualizations. I also wanted to present a different approach, so chose to ask
 the reader a specific question and give the user controls that enabled them
 to answer that question. This came from what I asked myself during exploration
@@ -76,7 +81,7 @@ Feedback -
 
 Feedback1:
 
-I like how you engaged the reader with the title and with the choice.
+"I like how you engaged the reader with the title and with the choice.
 It invites the readers to explore the visualization.
 
 You solve a problem or showing number versus percentage with two graph,
@@ -86,10 +91,10 @@ The colors dead/ survived are very strong, you can use more subdued colors,
 and add the class as a sub-category within the gender category.
 
 Hope that help
-Emmanuelle
+"
 
 Feedback2:
-Great job! I think the idea of putting the reader in the shoes of a person
+"Great job! I think the idea of putting the reader in the shoes of a person
 on board the Titanic is very powerful - it immediately piques people's
 interests to explore and play with the visualization.
 
@@ -100,10 +105,10 @@ So maybe you can split the stacked bars to form two separate bars
 or even consider other forms of visualization?
 Just some ideas for your consideration.
 
-Keep up the great work!
+Keep up the great work!"
 
 Feedback3:
-What do you notice in the visualization?
+"What do you notice in the visualization?
   The bar chart is explanatory
   On selecting a region, loved the animated line which gives me y-axis value
   Hovering on a region gives me the data
@@ -117,7 +122,9 @@ What do you think is the main takeaway from this visualization?
   Having one screen to answer all the questions.
   The user can filter the charts based on different data points.
 Is there something you don’t understand in the graphic?
-  No.
+  No."
 
 Resources:
 colorpicker.org
+http://stackoverflow.com/questions/1584370/how-to-merge-two-arrays-in-javascript-and-de-duplicate-items
+http://stackoverflow.com/questions/18558045/dimple-js-add-data-labels-to-each-bar-of-the-bar-chart
