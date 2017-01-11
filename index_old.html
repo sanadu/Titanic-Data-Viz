@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <script type="text/javascript">
+      function get_data(d) {
+        if(d['Survived'] == 0){
+          d['Survived'] = "Dead"
+        } else{
+          d['Survived'] = "Survived"
+        };
+        if(d['Pclass'] == 1){
+          d['Pclass'] = "First Class"
+        } else if (d['Pclass'] == 2){
+          d['Pclass'] = "Second Class"
+        } else if (d['Pclass'] == 3){
+          d['Pclass'] = "Third Class"
+        };
+        d['number_of_passengers'] = 1;
+        if ( d['Age'] <= 2){
+          d['age_group'] = "Infant(Male & Female)"
+        } else if (d['Age'] <= 12) {
+          d['age_group'] = "Child(Male & Female)"
+        } else if (d['Age'] <= 18) {
+          d['age_group'] = "Teen(Male & Female)"
+        } else if (d['Age'] <= 25) {
+          d['age_group'] = "Youth(Male & Female)"
+        } else if (d['Age'] <= 65) {
+          d['age_group'] = "Adult(Male & Female)"
+        } else if (d['Age'] <= 100) {
+          d['age_group'] = "Senior(Male & Female)"
+        } else {
+          d['age_group'] = "Unknown"
+        }
+        return d;
+      };
+      function get_chart(data) {
+        /*
+        D3.js setup code
+        */
+          "use strict";
+          var margin = 75,
+              width = 1000 - margin,
+              height = 500 - margin;
+          var svg = d3.select("body")
+            .append("svg")
+              .attr("width", width + margin)
+              .attr("height", height + margin)
+            .append('g')
+                .attr('class','chart');
+      /*
+        Dimple.js Chart construction code
+      */
+          var myChart = new dimple.chart(svg, data);
+          myChart.defaultColors = [new dimple.color("#264d00"),new dimple.color("#800000")]
+          var x = myChart.addCategoryAxis("x", ["Sex","Pclass"]);
+          x.addOrderRule(["female","male"])
+          x.addGroupOrderRule(["First Class","Second Class", "Third Class"]);
+          x.fontSize="14px";
+          x.title="Passenger Characteristics(Sex grouped by Cabin Class)";
+          var y = myChart.addMeasureAxis("y","number_of_passengers");
+          if (d3.select("#count_btn").style("opacity")=="1"){
+            y.showPercent=true;
+          }
+          else if (d3.select("#percent_btn").style("opacity")=="1"){
+            y.showPercent=false;
+          }
+          y.title="Passenger Count";
+          y.fontSize="14px";
+          var s = myChart.addSeries(["Survived"], dimple.plot.bar);
+          s.addOrderRule(["Survived","Dead"]);
+          myChart.addLegend(65, 10, 760, 70, "right");
+          return myChart;
+      };
+      function get_filtered_data(data){
+          var age = d3.select('#age_select').property('value');
+          var sex = d3.select('#sex_select').property('value');
+          var pclass = d3.select('#class_select').property('value');
+          if (sex === "Male"){
+            data = dimple.filterData(data, "Sex", ["male"]);
+          } else if(sex === "Female"){
+            data = dimple.filterData(data, "Sex", ["female"]);
+          }
+          if (age === "Infant(0-2)" ){
+            data = dimple.filterData(data, "age_group", ["Infant(Male & Female)"]);
+          } else if (age === "Child(3-12)" ){
+            data = dimple.filterData(data, "age_group", ["Child(Male & Female)"]);
+          } else if (age === "Teen(12-18)" ){
+            data = dimple.filterData(data, "age_group", ["Teen(Male & Female)"]);
+          } else if (age === "Youth(19-25)" ){
+            data = dimple.filterData(data, "age_group", ["Youth(Male & Female)"]);
+          } else if (age === "Adult(25-65)" ){
+            data = dimple.filterData(data, "age_group", ["Adult(Male & Female)"]);
+          } else if (age === "Senior(65+)" ){
+            data = dimple.filterData(data, "age_group", ["Senior(Male & Female)"]);
+          }
+          if (pclass === "First Class"){
+            data = dimple.filterData(data, "Pclass", ["First Class"]);
+          } else if (pclass === "Second Class"){
+            data = dimple.filterData(data, "Pclass", ["Second Class"]);
+          } else if (pclass === "Third Class"){
+            data = dimple.filterData(data, "Pclass", ["Third Class"]);
+          }
+          return data;
+        };
+        function draw(data) {
+          data = get_filtered_data(data);
+          var myChart = get_chart(data)
+          myChart.draw();
+        };
+      </script>
+  </head>
+<body>
+  <h1>Would you have survived if you were a passenger on the Titanic?</h1>
+  <p></p>
+  The giant steam ship RMS Titanic, thought to be unsunkable, sunk on her
+  maiden voyage after colliding with an iceberg, killing 1502 out of 2224 passengers and crew.
+  The graphics below is based on the passenger log from the ship and
+   shows how various characteristics such as age, sex and cabin class
+  might predict a passenger's survival.
+  <p></p>
+  <p></p>
+  Are you a male or female?
+  <select id="sex_select">
+    <option>Show All</option>
+    <option>Male</option>
+    <option>Female</option>
+  </select>
+  <p></p>
+  <p></p>
+  Which cabin class will you travel in?
+  <select id="class_select">
+    <option>Any Class</option>
+    <option>First Class</option>
+    <option>Second Class</option>
+    <option>Third Class</option>
+  </select>
+  <p></p>
+  <p></p>
+  How old are you?
+  <select id="age_select">
+    <option>Show All</option>
+    <option>Infant(0-2)</option>
+    <option>Child(3-12)</option>
+    <option>Teen(12-18)</option>
+    <option>Youth(19-25)</option>
+    <option>Adult(25-65)</option>
+    <option>Senior(65+)</option>
+  </select>
+  <p></p>
+  <p></p>
+  <div>
+  Toggle option to see counts and percentages:
+  </div>
+  <p></p>
+  <p></p>
+  <div>
+    <button id="count_btn">Count</button>
+    <button id="percent_btn">Percentage</button>
+  </div>
+
+  <script type="text/javascript">
+  /*
+    Use D3 (not dimple.js) to load the CSV file
+    and pass the contents of it to the draw function
+    */
+  d3.select("#percent_btn").style("opacity",0.2);
+  d3.csv("data/titanic_data.csv", get_data, draw);
+  //If a button is clicked, change the chart
+  d3.select("#count_btn").on("click", function() {
+    d3.select("#percent_btn").style("opacity",1);
+    d3.select("#count_btn").style("opacity",0.2);
+    d3.select("svg").remove();
+    d3.csv("data/titanic_data.csv", get_data, draw);
+  });
+  d3.select("#percent_btn").on("click", function() {
+    d3.select("#percent_btn").style("opacity",0.2);
+    d3.select("#count_btn").style("opacity",1);
+    d3.select("svg").remove();
+    d3.csv("data/titanic_data.csv", get_data, draw);
+  });
+  d3.select("#age_select").on("change", function() {
+    d3.select("svg").remove();
+    d3.csv("data/titanic_data.csv", get_data, draw);
+  });
+  d3.select("#sex_select").on("change", function() {
+    d3.select("svg").remove();
+    d3.csv("data/titanic_data.csv", get_data, draw);
+  });
+  d3.select("#class_select").on("change", function() {
+    d3.select("svg").remove();
+    d3.csv("data/titanic_data.csv", get_data, draw);
+  });
+  </script>
+
+
+
+</body>

@@ -125,9 +125,8 @@ Is there something you don’t understand in the graphic?
   No."
 
 Feedback4(from udacity review):
-Points to change: Add passenger class labels for each bar. 
+Points to change: Add passenger class labels for each bar.
 Use "perished" instead of "dead".
-
 
 Resources:
 colorpicker.org
