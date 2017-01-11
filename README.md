@@ -124,6 +124,11 @@ What do you think is the main takeaway from this visualization?
 Is there something you don’t understand in the graphic?
   No."
 
+Feedback4(from udacity review):
+Points to change: Add passenger class labels for each bar. 
+Use "perished" instead of "dead".
+
+
 Resources:
 colorpicker.org
 http://stackoverflow.com/questions/1584370/how-to-merge-two-arrays-in-javascript-and-de-duplicate-items

@@ -17,7 +17,7 @@
         };
 
         if(d['Survived'] == 0){
-          d['Survived'] = "Dead"
+          d['Survived'] = "Perished"
         } else{
           d['Survived'] = "Survived"
         };
@@ -92,7 +92,7 @@
           y.showGridlines = false;
 
           var s = myChart.addSeries(["Survived"], dimple.plot.bar);
-          s.addOrderRule(["Survived","Dead"]);
+          s.addOrderRule(["Survived","Perished"]);
 
           myChart.addLegend(65, 10, 760, 70, "right");
           myChart.draw();
@@ -127,6 +127,29 @@
                 .style("font-weight", "bold")
                 .style("opacity", 0.7)
                 .text(value);
+          });
+
+          // After drawing access the shapes and their associated data
+          // to add labels on bars for survival rates.
+          d3.selectAll(".dimple-bar.dimple-perished").each(function(d) {
+
+            // Get the rectangle
+            var shape = d3.select(this);
+
+            // Get the height and width from the rectangle
+            height = parseFloat(this.getAttribute("height"));
+            width = parseFloat(this.getAttribute("width"));
+
+            // Add a text label for the value
+            svg.append("text")
+                // Position in the center of the shape
+                .attr("x", parseFloat(this.getAttribute("x")) +  width/2)
+                .attr("y", parseFloat(this.getAttribute("y")) -  8)
+                .style("text-anchor", "middle")
+                .style("font-size", "14px")
+                .style("font-family", "sans-serif")
+                .style("opacity", 1.0)
+                .text(d.xField[1]);
           });
 
       };
